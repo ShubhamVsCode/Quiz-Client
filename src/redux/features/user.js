@@ -89,7 +89,7 @@ export const {
   useGetProfileMutation,
   useLoginMutation,
   useLogoutMutation,
-  useSignupMutation,
+  useRegisterMutation,
 
   useGetUpcomingQuizzesQuery,
 
