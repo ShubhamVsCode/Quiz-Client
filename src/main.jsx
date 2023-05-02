@@ -12,6 +12,7 @@ import LoginPage from "./pages/Login.jsx";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 import RegisterPage from "./pages/Register.jsx";
+import Quiz from "./pages/Quiz.jsx";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <Dashboard />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "/quiz/:quizId",
+        element: (
+          <ProtectedRoutes>
+            <Quiz />
           </ProtectedRoutes>
         ),
       },

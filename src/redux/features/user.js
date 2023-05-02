@@ -51,6 +51,17 @@ export const userApi = createApi({
       }),
     }),
 
+    getAllQuizzes: builder.query({
+      query: () => ({
+        url: "/quiz/all",
+      }),
+    }),
+    getAQuiz: builder.query({
+      query: (id) => ({
+        url: `/quiz/${id}`,
+      }),
+    }),
+
     createQuestion: builder.mutation({
       query: (data) => ({
         url: "/question",
@@ -92,6 +103,8 @@ export const {
   useRegisterMutation,
 
   useGetUpcomingQuizzesQuery,
+  useGetAllQuizzesQuery,
+  useGetAQuizQuery,
 
   useCreateQuestionMutation,
   useUpdateQuestionMutation,
