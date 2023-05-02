@@ -9,9 +9,11 @@ function App() {
 
   return (
     <>
-      <Link to="/">Home</Link>
-      <Link to="/dashboard">Dashboard</Link>
-      <Link to="/login">Login</Link>
+      <div className="flex gap-10 justify-center">
+        <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/login">Login</Link>
+      </div>
       <Outlet />
     </>
   );

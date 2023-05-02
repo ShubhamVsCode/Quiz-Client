@@ -9,6 +9,8 @@ import { MantineProvider } from "@mantine/core";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Dashboard from "./pages/Dashboard.jsx";
 import LoginPage from "./pages/Login.jsx";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoutes from "./components/ProtectedRoutes.jsx";
 
 const router = createBrowserRouter([
   {
@@ -17,7 +19,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard",
-        element: <Dashboard />,
+        element: (
+          <ProtectedRoutes>
+            <Dashboard />
+          </ProtectedRoutes>
+        ),
       },
       {
         path: "/login",
@@ -32,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <MantineProvider withGlobalStyles withNormalizeCSS>
         <RouterProvider router={router} />
+        <Toaster position="top-center" />
       </MantineProvider>
     </Provider>
   </React.StrictMode>

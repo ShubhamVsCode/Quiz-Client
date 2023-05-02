@@ -1,6 +1,4 @@
 import {
-  TextInput,
-  PasswordInput,
   Checkbox,
   Anchor,
   Paper,
@@ -14,8 +12,16 @@ import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
+import { Link, Navigate, redirect, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../redux/features/user";
+import { useEffect } from "react";
+import { toast } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { authState, setUser } from "../redux/features/auth";
 
 export default function LoginPage() {
+  const user = useSelector(authState);
+
   const schema = z.object({
     email: z
       .string()
@@ -40,9 +46,37 @@ export default function LoginPage() {
     resolver: zodResolver(schema),
   });
 
+  const [loginFunction, loginResponse] = useLoginMutation();
+
   const onSubmit = (data) => {
-    console.log(data);
+    loginFunction(data);
   };
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (loginResponse.isSuccess) {
+      toast.success("Login successfully!");
+      localStorage.setItem("token", loginResponse.data?.token);
+      localStorage.setItem("user", JSON.stringify(loginResponse.data?.user));
+      dispatch(
+        setUser({
+          success: true,
+          user: loginResponse.data?.user,
+          token: loginResponse.data?.token,
+        })
+      );
+      return navigate("/dashboard");
+    }
+    if (loginResponse.isError) {
+      toast.error(loginResponse?.error?.data?.message);
+    }
+  }, [loginResponse]);
+
+  if (user?.token) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
     <Container size={420} my={40}>
@@ -58,9 +92,9 @@ export default function LoginPage() {
       </Title>
       <Text color="dimmed" size="sm" align="center" mt={5}>
         Do not have an account yet?{" "}
-        <Anchor size="sm" component="button">
+        <Link className="text-primaryBlue hover:underline" to={"/register"}>
           Create account
-        </Anchor>
+        </Link>
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -85,7 +119,7 @@ export default function LoginPage() {
             <div className="text-left flex flex-col">
               <label htmlFor="password">Password</label>
               <input
-                type="text"
+                type="password"
                 id="password"
                 {...register("password")}
                 className={`border px-3 py-2 rounded focus:outline-2 outline-primaryBlue ${
@@ -118,60 +152,3 @@ export default function LoginPage() {
     </Container>
   );
 }
-
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { z } from "zod";
-
-// const schema = z.object({
-//   email: z
-//     .string()
-//     .nonempty("Email is required")
-//     .email("Email format is not valid"),
-//   password: z
-//     .string()
-//     .nonempty("Channel is required")
-//     .min(7, "Password must be at least 7 characters"),
-// });
-
-// const LoginPage = () => {
-//   const form = useForm({
-//     defaultValues: {
-//       username: "",
-//       email: "",
-//       channel: "",
-//     },
-//     resolver: zodResolver(schema),
-//   });
-
-//   const { register, handleSubmit, formState } = form;
-//   const { errors } = formState;
-
-//   const onSubmit = (data) => {
-//     console.log(data);
-//   };
-
-//   return (
-//     <div>
-//       <h1>Zod YouTube Form</h1>
-
-//       <form onSubmit={handleSubmit(onSubmit)} noValidate>
-//         <div className="form-control">
-//           <label htmlFor="email">E-mail</label>
-//           <input type="email" id="email" {...register("email")} />
-//           <p className="error">{errors.email?.message}</p>
-//         </div>
-
-//         <div className="form-control">
-//           <label htmlFor="password">Password</label>
-//           <input type="text" id="password" {...register("password")} />
-//           <p className="error">{errors.password?.message}</p>
-//         </div>
-
-//         <button>Submit</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default LoginPage;
