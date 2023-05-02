@@ -2,13 +2,37 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
+import "./assets/font/stylesheet.css";
 import { Provider } from "react-redux";
 import { store } from "./redux/store.js";
+import { MantineProvider } from "@mantine/core";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Dashboard from "./pages/Dashboard.jsx";
+import LoginPage from "./pages/Login.jsx";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard />,
+      },
+      {
+        path: "/login",
+        element: <LoginPage />,
+      },
+    ],
+  },
+]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <MantineProvider withGlobalStyles withNormalizeCSS>
+        <RouterProvider router={router} />
+      </MantineProvider>
     </Provider>
   </React.StrictMode>
 );
