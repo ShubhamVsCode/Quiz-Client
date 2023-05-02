@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { authState, setUser } from "../redux/features/auth";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useCheckTokenMutation } from "../redux/features/user";
 import { toast } from "react-hot-toast";
 
